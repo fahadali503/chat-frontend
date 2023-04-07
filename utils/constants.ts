@@ -1,0 +1,1 @@
+export const AUTH_LOCAL_STORAGE_CONSTANT = "AUTH";
