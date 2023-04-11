@@ -7,6 +7,10 @@ import Head from "next/head";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useLocalStorage } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
+import { useRouter } from "next/router";
+import { AuthLocalStorage } from "@/types/user.types";
+import { useDispatch } from "react-redux";
+import { updateAuthAction } from "@/store/auth/auth.slice";
 
 const useStyles = createStyles((theme) => {
     return {
@@ -20,10 +24,12 @@ export default function SignIn() {
     const { classes } = useStyles();
     const [data, setData] = useState({ email: "", password: "" });
     const [loading, setLoading] = useState(false);
-    const [_, setAuthLocalStorage] = useLocalStorage<Omit<ILoginResponse, "message" | "success"> | null>({
+    const [_, setAuthLocalStorage] = useLocalStorage<AuthLocalStorage | null>({
         key: AUTH_LOCAL_STORAGE_CONSTANT,
         defaultValue: null
     });
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         setData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -42,6 +48,8 @@ export default function SignIn() {
                 color: "green",
                 autoClose: 3000
             });
+            dispatch(updateAuthAction({ token: response.token, user: response.user }));
+            router.push("/chat");
         } catch (error) {
             const err = error as AxiosError<IAuthErrorResponse>;
             if (err.response && err.response.data) {
