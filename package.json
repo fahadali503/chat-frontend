@@ -25,7 +25,8 @@
     "@mantine/tiptap": "^6.0.5",
     "@next/font": "^13.2.4",
     "@reduxjs/toolkit": "^1.9.3",
-    "@tabler/icons": "^2.11.0",
+    "@tabler/icons": "^2.16.0",
+    "@tabler/icons-react": "^2.16.0",
     "@tiptap/extension-link": "^2.0.0-beta.220",
     "@tiptap/react": "^2.0.0-beta.220",
     "@tiptap/starter-kit": "^2.0.0-beta.220",
@@ -38,12 +39,14 @@
     "emoji-picker-react": "^4.4.8",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
+    "lodash": "^4.17.21",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^8.0.5",
-    "typescript": "5.0.2"
+    "typescript": "5.0.2",
+    "voice-recorder-react": "^1.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
