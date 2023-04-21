@@ -75,6 +75,8 @@ export default function SignupPage() {
                         <Button
                             disabled={data.email.length === 0 || data.password.length === 0}
                             loading={loading}
+                            className="bg-blue-400"
+
                             w={"100%"} type="submit">
                             Sign Up
                         </Button>
