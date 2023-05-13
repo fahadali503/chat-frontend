@@ -20,7 +20,7 @@ export function SelectedChat({ selectedChatId, friend }: Props) {
         <ChatHeaderComponent friend={friend!} />
 
         {/* Messages */}
-        <MessagesListComponent />
+        <MessagesListComponent chatId={selectedChatId} />
 
         {/* Chat Form */}
         <ChatForm />

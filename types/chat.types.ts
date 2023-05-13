@@ -6,3 +6,12 @@ export type IChat = {
     createdAt: string;
     updatedAt: string;
 }
+
+export type IMessage = {
+    _id: string;
+    sender: IUser | string;
+    content: string;
+    chatId: string;
+    createdAt: string;
+    updatedAt: string;
+}
