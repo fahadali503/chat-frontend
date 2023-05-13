@@ -2,15 +2,22 @@ import { Stack, Title } from "@mantine/core"
 import { ChatHeaderComponent } from "./ChatHeader"
 import { MessagesListComponent } from "./MessagesList"
 import { ChatForm } from "./ChatForm"
+import { IUser } from "@/types/user.types"
 
 type Props = {
-
+    selectedChatId: string;
+    friend: IUser | null;
 }
-export function SelectedChat({ }: Props) {
+export function SelectedChat({ selectedChatId, friend }: Props) {
+    if (!selectedChatId) {
+        return <div style={{ backgroundImage: "url(/chat-window-bg.png)", backgroundColor: "#f2f2f2" }} className="h-full relative">
+            <WelcomeScreen />
+        </div>
+    }
 
     return <div style={{ backgroundImage: "url(/chat-window-bg.png)", backgroundColor: "#f2f2f2" }} className="h-full relative">
         {/* Chat Header */}
-        <ChatHeaderComponent />
+        <ChatHeaderComponent friend={friend!} />
 
         {/* Messages */}
         <MessagesListComponent />
