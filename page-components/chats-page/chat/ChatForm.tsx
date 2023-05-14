@@ -1,5 +1,5 @@
 import { EmojiPicker } from "@/components/EmojiPicker"
-import { Group, Stack, TextInput, UnstyledButton } from "@mantine/core"
+import { Group, Loader, Stack, TextInput, UnstyledButton } from "@mantine/core"
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { IconMoodSmile } from '@tabler/icons-react';
 import { useClickOutside } from "@mantine/hooks";
