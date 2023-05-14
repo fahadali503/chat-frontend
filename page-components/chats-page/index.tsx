@@ -6,7 +6,6 @@ import { ChatApi } from "@/api/chat.api";
 import { IChat } from "@/types/chat.types";
 import { IUser } from "@/types/user.types";
 import { useAuthenticatedSocket } from "@/hooks/useAuthenticatedSocket";
-import { useSocket, useSocketEvent } from "socket.io-react-hook";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 
@@ -35,8 +34,16 @@ export function ChatsPageComponent() {
                 color: "red"
             })
         });
+        socket.on('joinChat', (message) => {
+            notifications.show({
+                message,
+                icon: <IconX size="1.1rem" />,
+                color: "green"
+            })
+        });
         return () => {
             socket.off("test");
+            socket.off("joinChat");
             socket.off("exception");
         }
     }, [connected])
@@ -47,6 +54,7 @@ export function ChatsPageComponent() {
                 const response = await chatApi.createChat(selectedFriendFromSearch);
                 setSelectedChatId(response.data._id);
                 setSelectedChat(response.data);
+                socket.emit("joinChat", response.data._id);
             })()
         }
     }, [selectedFriendFromSearch]);
@@ -55,7 +63,7 @@ export function ChatsPageComponent() {
     return <Grid className="h-full p-0 m-0">
         {/* Display Chat List */}
         <Grid.Col span={3}>
-            <ChatListComponent setSelectedFriendFromSearch={setSelectedFriendFromSearch}
+            <ChatListComponent socket={socket} setSelectedFriendFromSearch={setSelectedFriendFromSearch}
                 selectedChatId={selectedChatId}
                 setSelectedChatId={(id: string) => setSelectedChatId(id)}
                 setFriend={setFriend}

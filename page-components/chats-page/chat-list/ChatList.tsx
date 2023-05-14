@@ -6,7 +6,7 @@ import { FriendsApi } from "@/api/friends.api";
 import { IUser } from "@/types/user.types";
 import { SelectFriend } from "./SelectFriend";
 import { ChatApi } from "@/api/chat.api";
-import { IChat } from "@/types/chat.types";
+import { IChat, ISocket } from "@/types/chat.types";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
@@ -15,10 +15,11 @@ type Props = {
     selectedChatId: string;
     setSelectedChatId: (id: string) => void;
     setFriend: (friend: IUser) => void;
+    socket: ISocket;
 };
 const friendsApi = new FriendsApi("/friends");
 const chatApi = new ChatApi();
-export function ChatListComponent({ setSelectedFriendFromSearch, selectedChatId, setSelectedChatId, setFriend }: Props) {
+export function ChatListComponent({ setSelectedFriendFromSearch, selectedChatId, setSelectedChatId, setFriend, socket }: Props) {
     const [friends, setFriends] = useState<IUser[]>([]);
     const [selectedFriend, setSelectedFriend] = useState<string>('');
     const [data, setData] = useState<SelectItem[]>([]);
@@ -79,6 +80,7 @@ export function ChatListComponent({ setSelectedFriendFromSearch, selectedChatId,
                             setSelectedChatId={(id) => {
                                 setSelectedChatId(id);
                                 setFriend(chat.friend);
+                                socket.emit("joinChat", chat._id);
                             }}
                         />
                     }) : null}
