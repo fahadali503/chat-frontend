@@ -3,12 +3,14 @@ import { ChatHeaderComponent } from "./ChatHeader"
 import { MessagesListComponent } from "./MessagesList"
 import { ChatForm } from "./ChatForm"
 import { IUser } from "@/types/user.types"
+import { ISocket } from "@/types/chat.types"
 
 type Props = {
     selectedChatId: string;
     friend: IUser | null;
+    socket: ISocket;
 }
-export function SelectedChat({ selectedChatId, friend }: Props) {
+export function SelectedChat({ selectedChatId, friend, socket }: Props) {
     if (!selectedChatId) {
         return <div style={{ backgroundImage: "url(/chat-window-bg.png)", backgroundColor: "#f2f2f2" }} className="h-full relative">
             <WelcomeScreen />
@@ -23,7 +25,7 @@ export function SelectedChat({ selectedChatId, friend }: Props) {
         <MessagesListComponent chatId={selectedChatId} />
 
         {/* Chat Form */}
-        <ChatForm />
+        <ChatForm selectedChatId={selectedChatId} socket={socket} />
     </div>
 }
 

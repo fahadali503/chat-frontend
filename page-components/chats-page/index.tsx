@@ -42,7 +42,6 @@ export function ChatsPageComponent() {
             })
         });
         return () => {
-            socket.off("test");
             socket.off("joinChat");
             socket.off("exception");
         }
@@ -74,7 +73,9 @@ export function ChatsPageComponent() {
         {/* Display selected chat */}
         <Grid.Col span={9} className="p-0">
 
-            <SelectedChat friend={friend} selectedChatId={selectedChatId} />
+            <SelectedChat friend={friend} selectedChatId={selectedChatId}
+                socket={socket}
+            />
 
         </Grid.Col>
         {/* END Display selected chat */}

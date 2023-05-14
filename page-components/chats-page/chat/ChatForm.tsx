@@ -1,26 +1,39 @@
 import { EmojiPicker } from "@/components/EmojiPicker"
 import { Group, Stack, TextInput, UnstyledButton } from "@mantine/core"
-import { FormEvent, useRef, useState } from "react"
+import { FormEvent, useEffect, useRef, useState } from "react"
 import { IconMoodSmile } from '@tabler/icons-react';
 import { useClickOutside } from "@mantine/hooks";
 import { EmojiClickData } from "emoji-picker-react";
 import { ChatFileUploadComponent } from "./ChatFileUpload";
 import { ChatRecordingComponent } from "./ChatRecording";
+import { IMessage, ISocket } from "@/types/chat.types";
 
 type Props = {
-
+    socket: ISocket;
+    selectedChatId: string;
 }
 
-export function ChatForm({ }: Props) {
+export function ChatForm({ socket, selectedChatId }: Props) {
     const [showEmoji, setShowEmoji] = useState(false);
     const emojiRef = useClickOutside(() => setShowEmoji(false));
     const [message, setMessage] = useState("");
     const messageRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        socket.on('message', (data: IMessage) => {
+            console.log("Message Recieved", data);
+        });
+
+        return () => {
+            socket.off('message');
+        }
+    }, [])
+
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
         console.log("MESSAGE", message)
-
+        socket.emit('message', { chatId: selectedChatId, content: message });
+        setMessage(" ");
     }
 
     function onEmojiPicker(emoji: EmojiClickData, _event: MouseEvent) {

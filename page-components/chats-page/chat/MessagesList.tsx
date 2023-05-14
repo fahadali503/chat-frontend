@@ -1,9 +1,8 @@
 import { ChatApi } from "@/api/chat.api";
-import { useAuthenticatedSocket } from "@/hooks/useAuthenticatedSocket";
 import { RootState } from "@/store";
 import { IMessage } from "@/types/chat.types";
 import { Avatar, Center, Group, Loader, Stack, Text } from "@mantine/core"
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from "react-redux";
 
@@ -15,31 +14,34 @@ type Props = {
 const chatApi = new ChatApi();
 export function MessagesListComponent({ chatId }: Props) {
     const [messages, setMessages] = useState<IMessage[]>([]);
-    const [hasMore, setHasMore] = useState(false);
-    const [fetching, setFetching] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
     const authenticatedUser = useSelector((state: RootState) => state.auth.user);
 
-    const fetchItems = useCallback(async () => {
-        console.log("Calling")
-        if (fetching) {
-            return;
+    useEffect(() => {
+        console.log({ chatId })
+        fetchItems(chatId);
+        return () => {
+            setMessages([]);
+            setPage(1);
         }
-        const response = await chatApi.getChatMessages(chatId, page);
-        setFetching(true);
-        setHasMore(true);
-        setMessages([...messages, ...response.data]);
-        setPage(page + 1);
-        setHasMore(response.data.length > 0);
-        setFetching(false);
-    }, [fetching, messages, chatId, authenticatedUser]);
+    }, [chatId])
 
+    const fetchItems = async (selectedChatId: string) => {
+        console.log("Calling")
+        const response = await chatApi.getChatMessages(selectedChatId, page);
+        if (response.data.length === 0) {
+            setHasMore(false);
+        } else {
+            setMessages([...messages, ...response.data]);
+            setPage(page + 1);
+        }
+    }
 
-    console.log("Messages", messages, page);
 
     return <InfiniteScroll
         dataLength={messages.length}
-        next={fetchItems}
+        next={fetchItems.bind(null, chatId)}
         hasMore={hasMore}
         loader={<Center>
             <Loader />
@@ -55,7 +57,7 @@ export function MessagesListComponent({ chatId }: Props) {
     >
         <Stack justify="flex-end" className="px-5 flex-col-reverse w-full">
             {messages.map(message => {
-                if (message.sender === authenticatedUser?._id) {
+                if ((typeof message.sender !== 'string') && message.sender._id === authenticatedUser?._id) {
                     return <AuthUserMessage
                         key={message._id}
                         {...message}
