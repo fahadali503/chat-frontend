@@ -1,8 +1,9 @@
 import { ChatApi } from "@/api/chat.api";
+import { useAuthenticatedSocket } from "@/hooks/useAuthenticatedSocket";
 import { RootState } from "@/store";
 import { IMessage } from "@/types/chat.types";
 import { Avatar, Center, Group, Loader, Stack, Text } from "@mantine/core"
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from "react-redux";
 

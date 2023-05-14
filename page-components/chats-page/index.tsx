@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { ChatApi } from "@/api/chat.api";
 import { IChat } from "@/types/chat.types";
 import { IUser } from "@/types/user.types";
+import { useAuthenticatedSocket } from "@/hooks/useAuthenticatedSocket";
+import { useSocket, useSocketEvent } from "socket.io-react-hook";
 
 const chatApi = new ChatApi();
 
@@ -12,8 +14,7 @@ export function ChatsPageComponent() {
     const [selectedFriendFromSearch, setSelectedFriendFromSearch] = useState('');
     const [selectedChatId, setSelectedChatId] = useState("")
     const [selectedChat, setSelectedChat] = useState<IChat | null>(null);
-    const [friend, setFriend] = useState<IUser | null>(null)
-
+    const [friend, setFriend] = useState<IUser | null>(null);
 
     useEffect(() => {
         if (selectedFriendFromSearch.length > 0) {
@@ -24,8 +25,6 @@ export function ChatsPageComponent() {
             })()
         }
     }, [selectedFriendFromSearch]);
-
-
 
 
     return <Grid className="h-full p-0 m-0">

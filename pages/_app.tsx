@@ -4,6 +4,7 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { Provider } from 'react-redux'
 import { store } from '@/store';
+import { IoProvider } from 'socket.io-react-hook';
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -13,7 +14,9 @@ export default function App({ Component, pageProps }: AppProps) {
       withNormalizeCSS
     >
       <Notifications position='top-right' />
-      <Component {...pageProps} />
+      <IoProvider>
+        <Component {...pageProps} />
+      </IoProvider>
     </MantineProvider>
   </Provider>
 }

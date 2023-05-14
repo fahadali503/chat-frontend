@@ -3,8 +3,9 @@ import { AUTH_LOCAL_STORAGE_CONSTANT } from '@/utils/constants';
 import { getValueFromLocalStorage } from '@/utils/localstorage';
 import axios, { AxiosInstance } from 'axios';
 
+export const API_URL = "http://localhost:4000"
 export const axiosInstance: AxiosInstance = axios.create({
-    baseURL: "http://localhost:4000"
+    baseURL: API_URL
 });
 
 
