@@ -22,7 +22,7 @@ export function SelectedChat({ selectedChatId, friend, socket }: Props) {
         <ChatHeaderComponent friend={friend!} />
 
         {/* Messages */}
-        <MessagesListComponent chatId={selectedChatId} />
+        <MessagesListComponent chatId={selectedChatId} socket={socket} />
 
         {/* Chat Form */}
         <ChatForm selectedChatId={selectedChatId} socket={socket} />

@@ -1,6 +1,6 @@
 import { ChatApi } from "@/api/chat.api";
 import { RootState } from "@/store";
-import { IMessage } from "@/types/chat.types";
+import { IMessage, ISocket } from "@/types/chat.types";
 import { Avatar, Center, Group, Loader, Stack, Text } from "@mantine/core"
 import { useEffect, useState } from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -9,17 +9,27 @@ import { useSelector } from "react-redux";
 
 type Props = {
     chatId: string;
+    socket: ISocket
 }
 
 const chatApi = new ChatApi();
-export function MessagesListComponent({ chatId }: Props) {
+export function MessagesListComponent({ chatId, socket }: Props) {
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
     const authenticatedUser = useSelector((state: RootState) => state.auth.user);
 
     useEffect(() => {
-        console.log({ chatId })
+        socket.on('message', (data: IMessage) => {
+            setMessages(items => ([data, ...items]));
+        });
+
+        return () => {
+            socket.off('message');
+        }
+    }, [])
+
+    useEffect(() => {
         fetchItems(chatId);
         return () => {
             setMessages([]);

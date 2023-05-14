@@ -19,15 +19,6 @@ export function ChatForm({ socket, selectedChatId }: Props) {
     const [message, setMessage] = useState("");
     const messageRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        socket.on('message', (data: IMessage) => {
-            console.log("Message Recieved", data);
-        });
-
-        return () => {
-            socket.off('message');
-        }
-    }, [])
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
